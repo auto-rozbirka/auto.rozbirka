@@ -1,0 +1,121 @@
+
+/* ---------- General Layout ---------- */
+
+body,
+input,
+textarea,
+select {
+  color: #000;
+  background: none;
+}
+body.two-sidebars,
+body.sidebar-first,
+body.sidebar-second,
+body {
+  width: 640px;
+}
+#sidebar-first,
+#sidebar-second,
+.navigation,
+#toolbar,
+#footer-wrapper,
+.tabs,
+.add-or-remove-shortcuts {
+  display: none;
+}
+.one-sidebar #content,
+.two-sidebars #content {
+  width: 100%;
+}
+#triptych-wrapper {
+  width: 960px;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+#triptych-first, #triptych-middle, #triptych-last {
+  width: 250px;
+}
+
+/* ---------- Node Pages ---------- */
+
+#comments .title,
+#comments form,
+.comment_forbidden {
+  display: none;
+}
+
+body.page-node #sidebar-first,
+body.page-node #breadcrumb,
+body.page-node #header,
+body.page-node #messages,
+body.page-node #footer-wrapper{
+    display: none;
+}
+body.page-node.node-type-product:before{
+    display: none;
+}
+body.page-node .node-product .content .field,
+body.page-node .node-product .content .field .field-label{
+    display: none;
+}
+body.page-node .node-product .content .field,
+body.page-node .node-product .content .commerce-product-sku-label {
+    display: none;
+}
+body.page-node .node-product .content .field.field-name-field-serial-namber,
+body.page-node .node-product .content .commerce-product-sku,
+body.page-node .node-product .content .field.field-name-commerce-price{
+    display: block;
+}
+body.page-node .node-product .content .field-collection-container{
+    display: none;
+}
+body.page-node.node-type-product h1#page-title{
+    font-size: 18px;
+    margin: 2px 0;
+    font-weight: 900;
+}
+body.node-type-product,
+body.node-type-product #page-wrapper,
+body.node-type-product #main,
+body.node-type-product #main-wrapper,
+body.node-type-product #content .section{
+    margin: 0 2px;
+    width: initial;
+    min-height: initial;
+    min-width: initial;
+    padding: 0;
+    font-size: 14px;
+    font-family: Area;
+    font-weight: 900;
+}
+
+body.page-node .node-product .content .field.field-name-field-serial-namber{
+    float: none;
+}
+.commerce-product-sku{
+    float: left;
+    font-size: 14px;
+}
+body.page-node .node-product .content .field.field-name-commerce-price{
+    float: right;
+    font-size: 14px;
+}
+.node .content{
+    font-size: initial;
+    margin-top: initial;
+}
+.content {
+    margin-top: initial;
+}
+
+
+
+
+
+
+
+
+
+

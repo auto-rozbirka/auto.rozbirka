@@ -1,0 +1,11 @@
+name = auto parts
+description = description.
+package = "Custom"
+core = 7.x
+
+version = "7.x-1.5"
+core = "7.x"
+project = "auto_parts"
+datestamp = "1504724060"
+
+stylesheets[all][] = css/print.css

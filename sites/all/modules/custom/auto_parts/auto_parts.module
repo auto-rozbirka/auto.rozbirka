@@ -1,0 +1,11 @@
+<?php
+
+function auto_parts_init() {
+  //drupal_add_css(drupal_get_path('module', 'auto_parts') . '/css/print.css');
+}
+
+function auto_parts_preprocess_node($vars) {
+    //render($vars['content']);
+   //p($vars['content']);
+  //drupal_add_css(drupal_get_path('module', 'auto_parts') . "/css/print.css");
+}
