@@ -1,0 +1,15 @@
+# Ignore configuration files that may contain sensitive information.
+sites/*/settings*.php
+
+# Ignore paths that contain user-generated content.
+sites/*/files
+sites/*/private
+
+
+# IDE files
+.idea/
+
+# dependencies
+
+/sites/all/themes/auto_parts/package-lock.json
+/sites/all/themes/auto_parts/node_modules/
