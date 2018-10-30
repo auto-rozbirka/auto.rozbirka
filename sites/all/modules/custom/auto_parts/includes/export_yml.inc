@@ -46,7 +46,7 @@ class ExportToYml {
    * @return mixed
    */
   public function getResult() {
-    return views_get_view_result('auto_pars', 'views_data_export_1');
+    return views_get_view_result('auto_pars', 'views_data_export_xml');
   }
 
   public function toFile($yaml) {
