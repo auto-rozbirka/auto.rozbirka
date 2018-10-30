@@ -20,8 +20,8 @@ class ExportToYml {
       $row['price'] = commerce_currency_amount_to_decimal($row['price'], 0);
       $row['currencyId'] = $product->field_commerce_price[0]['raw']['currency_code'];
       $row['picture'] = file_create_url($product->field_field_image[0]['raw']['uri']);
-      $row['name'] = $product->node_title;
-      $row['description'] = $product->node_title;
+      $row['name'] = $product->commerce_product_field_data_field_product_title;
+      $row['description'] = $product->commerce_product_field_data_field_product_title;
 
       $rows[] = ['key' => 'offer', 'attributes' => ['available' => TRUE, 'id' => $product->field_field_serial_namber[0]['raw']['value']], 'value' => $row];
     }
