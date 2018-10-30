@@ -17,6 +17,7 @@ class ExportToYml {
     foreach ($result as $k => $product) {
       $row = [];
       $row['price'] = $product->field_commerce_price[0]['raw']['amount'] * 1.2;
+      $row['price'] = commerce_currency_amount_to_decimal($row['price'], 0);
       $row['currencyId'] = $product->field_commerce_price[0]['raw']['currency_code'];
       $row['picture'] = file_create_url($product->field_field_image[0]['raw']['uri']);
       $row['name'] = $product->node_title;
