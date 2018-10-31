@@ -22,7 +22,7 @@ class ExportToYml {
       $row['picture'] = file_create_url($product->field_field_image[0]['raw']['uri']);
       $row['name'] = $product->commerce_product_field_data_field_product_title;
       $row['description'] = $product->commerce_product_field_data_field_product_title;
-      $row[] = ['key' => 'param', 'attributes' => ['name' => $product->field_field_serial_namber[0]['raw']['value']], 'value' => $row];
+      $row[] = ['key' => 'param', 'attributes' => ['Каталожный номер' => $product->field_field_serial_namber[0]['raw']['value']], 'value' => $row];
 
       $rows[] = ['key' => 'offer', 'attributes' => ['available' => TRUE, 'id' => $product->field_field_serial_namber[0]['raw']['value']], 'value' => $row];
     }
