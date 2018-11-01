@@ -1,17 +1,5 @@
 <?php
 
-function auto_parts_init() {
-//  drupal_add_css(drupal_get_path('module', 'auto_parts') . '/css/print.css');
-
-//  module_load_include('inc', 'auto_parts', 'theme/views_data_export.theme');
-}
-
-function auto_parts_preprocess_node($vars) {
-    //render($vars['content']);
-   //p($vars['content']);
-  //drupal_add_css(drupal_get_path('module', 'auto_parts') . "/css/print.css");
-}
-
 function auto_parts_cron() {
   module_load_include('inc', 'auto_parts', 'includes/export_yml');
   $export = new ExportToYml();
@@ -26,20 +14,16 @@ function auto_parts_menu() {
   $items['auto-pars/export/excel'] = array(
     'title' => 'Export to excel',
     'page callback' => 'auto_parts_export',
-//    'theme callback' => 'ajax_base_page_theme',
-//    'delivery callback' => 'ajax_deliver',
     'access callback' => TRUE,
-//    'description' => 'Ajax callback for view loading.',
     'type' => MENU_CALLBACK,
-//    'file' => 'includes/excel.inc',
-    'file' => 'includes/export_yml.inc',
+    'file' => 'includes/export_excel.inc',
   );
   return $items;
 }
 
 
 function auto_parts_export() {
-  $export = new ExportToYml();
+  $export = new ExportToExcel();
   $export->export();
   return '<div>22222</div>';
 }

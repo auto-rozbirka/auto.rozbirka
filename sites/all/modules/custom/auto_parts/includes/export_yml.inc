@@ -1,13 +1,8 @@
 <?php
 
-
 class ExportToYml {
 
   public $yaml;
-
-  public function __construct() {
-
-  }
 
   public function export() {
     $result = $this->getResult();
@@ -16,12 +11,19 @@ class ExportToYml {
 
     foreach ($result as $k => $product) {
       $row = [];
+
       $row['price'] = $product->field_commerce_price[0]['raw']['amount'] * 1.2;
       $row['price'] = commerce_currency_amount_to_decimal($row['price'], 0);
       $row['currencyId'] = $product->field_commerce_price[0]['raw']['currency_code'];
-      $row['picture'] = file_create_url($product->field_field_image[0]['raw']['uri']);
       $row['name'] = $product->commerce_product_field_data_field_product_title;
       $row['description'] = $product->commerce_product_field_data_field_product_title;
+
+      //picture
+      foreach ($product->field_field_image as $field_field_image) {
+        $row[] = ['key' => 'picture', 'value' => file_create_url($field_field_image['raw']['uri'])];
+      }
+
+      //serial number
       $row[] = ['key' => 'param', 'attributes' => ['name' => 'Каталожный номер'], 'value' => $product->field_field_serial_namber[0]['raw']['value']];
 
       $rows[] = ['key' => 'offer', 'attributes' => ['available' => TRUE, 'id' => $product->field_field_serial_namber[0]['raw']['value']], 'value' => $row];
