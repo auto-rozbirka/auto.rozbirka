@@ -8,7 +8,6 @@ class ExportToYml {
     $result = $this->getResult();
     $rows = [];
 
-
     foreach ($result as $k => $product) {
       $row = [];
 
@@ -23,8 +22,12 @@ class ExportToYml {
         $row[] = ['key' => 'picture', 'value' => file_create_url($field_field_image['raw']['uri'])];
       }
 
-      //serial number
+      //params
       $row[] = ['key' => 'param', 'attributes' => ['name' => 'Каталожный номер'], 'value' => $product->field_field_serial_namber[0]['raw']['value']];
+      $row[] = ['key' => 'param', 'attributes' => ['name' => 'Состояние'], 'value' => 'б/у'];
+      $row[] = ['key' => 'param', 'attributes' => ['name' => 'Марка'], 'value' => render($product->field_field_car_brand[0]['rendered'])];
+      $row[] = ['key' => 'param', 'attributes' => ['name' => 'Модель'], 'value' => render($product->field_field_car_series[0]['rendered'])];
+      $row[] = ['key' => 'param', 'attributes' => ['name' => 'Год выпуска'], 'value' => $product->field_field_year[0]['raw']['value']];
 
       $rows[] = ['key' => 'offer', 'attributes' => ['available' => TRUE, 'id' => $product->field_field_serial_namber[0]['raw']['value']], 'value' => $row];
     }
