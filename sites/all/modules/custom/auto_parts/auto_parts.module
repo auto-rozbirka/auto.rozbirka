@@ -18,6 +18,13 @@ function auto_parts_menu() {
     'type' => MENU_CALLBACK,
     'file' => 'includes/export_excel.inc',
   );
+  $items['display-sum'] = array(
+    'title' => 'Sum product cost',
+    'page callback' => 'displaySum',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
 }
 
@@ -26,4 +33,33 @@ function auto_parts_export() {
   $export = new ExportToExcel();
   $export->export();
   return '<div>22222</div>';
+}
+
+
+function displaySum() {
+
+  $sum = getSum();
+
+  $sum = substr($sum, 0, -2) . '.' . substr($sum, -2);
+
+  return number_format($sum, 2, ',', ' ');
+}
+
+function getSum() {
+
+  $query = '
+    SELECT SUM (CEILING(field_data_commerce_stock.commerce_stock_value) * field_data_commerce_price.commerce_price_amount) as sum
+    FROM 
+    {node} node
+    LEFT JOIN {field_data_field_product} field_data_field_product ON node.nid = field_data_field_product.entity_id AND (field_data_field_product.entity_type = \'node\' AND field_data_field_product.deleted = \'0\')
+    LEFT JOIN {commerce_product} commerce_product_field_data_field_product ON field_data_field_product.field_product_product_id = commerce_product_field_data_field_product.product_id
+    LEFT JOIN {field_data_commerce_stock} field_data_commerce_stock ON commerce_product_field_data_field_product.product_id = field_data_commerce_stock.entity_id AND (field_data_commerce_stock.entity_type = \'commerce_product\' AND field_data_commerce_stock.deleted = \'0\')
+    LEFT JOIN {field_data_commerce_price} field_data_commerce_price ON commerce_product_field_data_field_product.product_id = field_data_commerce_price.entity_id AND (field_data_commerce_price.entity_type = \'commerce_product\' AND field_data_commerce_price.deleted = \'0\')
+    WHERE (( (node.status = \'1\') AND (node.type IN  (\'product\')) AND (field_data_commerce_stock.commerce_stock_value > \'0\') ))
+    LIMIT 100 OFFSET 0
+  ';
+
+  $result = db_query($query)->fetchAssoc();
+
+  return $result['sum'];
 }
