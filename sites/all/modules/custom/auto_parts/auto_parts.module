@@ -29,6 +29,7 @@ function auto_parts_menu() {
     'page callback' => 'ajax_example_progressbar_progress',
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
+    'file' => 'includes/export_excel.inc',
   );
 
   return $items;
