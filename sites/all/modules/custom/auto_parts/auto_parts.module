@@ -1,9 +1,9 @@
 <?php
 
 function auto_parts_cron() {
-  module_load_include('inc', 'auto_parts', 'includes/export_yml');
-  $export = new ExportToYml();
-  $export->export();
+//  module_load_include('inc', 'auto_parts', 'includes/export_yml');
+//  $export = new ExportToYml();
+//  $export->export();
 }
 
 /**
@@ -11,19 +11,127 @@ function auto_parts_cron() {
  */
 function auto_parts_menu() {
   $items = array();
-  $items['auto-pars/export/excel'] = array(
-    'title' => 'Export to excel',
-    'page callback' => 'auto_parts_export',
+  $items['display-sum'] = array(
+    'title' => 'Sum product cost',
+    'page callback' => 'displaySum',
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
-    'file' => 'includes/export_excel.inc',
   );
+  $items['admin/commerce/export-to-yml'] = array(
+    'title' => 'Export to YML',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_progressbar_form'),
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['examples/ajax_example/progressbar/progress'] = array(
+    'title' => 'Sum product cost',
+    'page callback' => 'ajax_example_progressbar_progress',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
 }
 
+function displaySum() {
 
-function auto_parts_export() {
-  $export = new ExportToExcel();
-  $export->export();
-  return '<div>22222</div>';
+  $sum = getSum();
+
+  $sum = substr($sum, 0, -2) . '.' . substr($sum, -2);
+
+  return number_format($sum, 2, ',', ' ');
+}
+
+function getSum() {
+
+  $query = '
+    SELECT SUM (CEILING(field_data_commerce_stock.commerce_stock_value) * field_data_commerce_price.commerce_price_amount) as sum
+    FROM 
+    {node} node
+    LEFT JOIN {field_data_field_product} field_data_field_product ON node.nid = field_data_field_product.entity_id AND (field_data_field_product.entity_type = \'node\' AND field_data_field_product.deleted = \'0\')
+    LEFT JOIN {commerce_product} commerce_product_field_data_field_product ON field_data_field_product.field_product_product_id = commerce_product_field_data_field_product.product_id
+    LEFT JOIN {field_data_commerce_stock} field_data_commerce_stock ON commerce_product_field_data_field_product.product_id = field_data_commerce_stock.entity_id AND (field_data_commerce_stock.entity_type = \'commerce_product\' AND field_data_commerce_stock.deleted = \'0\')
+    LEFT JOIN {field_data_commerce_price} field_data_commerce_price ON commerce_product_field_data_field_product.product_id = field_data_commerce_price.entity_id AND (field_data_commerce_price.entity_type = \'commerce_product\' AND field_data_commerce_price.deleted = \'0\')
+    WHERE (( (node.status = \'1\') AND (node.type IN  (\'product\')) AND (field_data_commerce_stock.commerce_stock_value > \'0\') ))
+    LIMIT 100 OFFSET 0
+  ';
+
+  $result = db_query($query)->fetchAssoc();
+
+  return $result['sum'];
+}
+
+
+function auto_parts_commerce_currency_info_alter(&$currencies, $language){
+  $currencies['USD']['thousands_separator'] = ' ';
+}
+
+/**
+ * @file
+ * Progress bar example.
+ */
+
+/**
+ * Implements hook_FORMID().
+ *
+ * Build a landing-page form for the progress bar example.
+ *
+ * @see https://api.drupal.org/api/drupal/developer%21topics%21forms_api_reference.html/7#ajax_progress
+ */
+function ajax_example_progressbar_form($form, &$form_state) {
+  drupal_add_js(drupal_get_path('module','auto_parts') . '/js/main.js', ['weight' => 9]);
+  drupal_add_library('system', 'drupal.ajax');
+
+  $form_state['time'] = REQUEST_TIME;
+
+  // We make a DIV which the progress bar can occupy. You can see this in use
+  // in ajax_example_progressbar_callback().
+  $form['status'] = array(
+    '#markup' => '<div id="progress-status"></div>',
+  );
+  $form['actions']['submit']['#ajax'] = array(
+    'callback' => 'example_ajax_submit',
+    'progress' => array('type' => 'bar'),
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit'),
+  );
+  return $form;
+}
+
+/**
+ * Get the progress bar execution status, as JSON.
+ *
+ * This is the menu handler for
+ * examples/ajax_example/progressbar/progress/$time.
+ *
+ * This function is our wholly arbitrary job that we're checking the status for.
+ * In this case, we're reading a system variable that is being updated by
+ * ajax_example_progressbar_callback().
+ *
+ * We set up the AJAX progress bar to check the status every second, so this
+ * will execute about once every second.
+ *
+ * The progress bar JavaScript accepts two values: message and percentage. We
+ * set those in an array and in the end convert it JSON for sending back to the
+ * client-side JavaScript.
+ *
+ * @see ajax_example_progressbar_callback()
+ */
+function ajax_example_progressbar_progress() {
+  module_load_include('inc', 'auto_parts', 'includes/export_yml');
+
+  $export = new ExportToYml();
+  $percent = $export->exportProgress();
+
+  $progress = [];
+  $progress['message'] = $percent >= 100 ? t('Done') : t('Executing...');
+  $progress['percentage'] = $percent >= 100 ? 100 : round($percent,2);
+  $progress['status'] = 'OK';
+
+  drupal_json_output($progress);
+  exit;
 }
