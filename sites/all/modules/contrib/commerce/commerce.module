@@ -636,6 +636,8 @@ function commerce_currency_format($amount, $currency_code, $object = NULL, $conv
     $amount = commerce_currency_amount_to_decimal($amount, $currency_code);
   }
 
+//  p($currency_code);
+//  p($currency,1);
   // Invoke the custom format callback if specified.
   if (!empty($currency['format_callback'])) {
     return $currency['format_callback']($amount, $currency, $object);

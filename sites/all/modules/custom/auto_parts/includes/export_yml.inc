@@ -15,7 +15,7 @@ class ExportToYml {
       $row['price'] = commerce_currency_amount_to_decimal($row['price'], 0);
       $row['currencyId'] = $product->field_commerce_price[0]['raw']['currency_code'];
       $row['name'] = $product->commerce_product_field_data_field_product_title;
-      $row['description'] = $product->commerce_product_field_data_field_product_title;
+      $row['description'] = t('УВАГА !!! Товар є в наявності.') . '<br/>' . t('Якщо ви хочете замовити цей товар, прошу замовте через сайт, або передзвонити по телефону і продиктувати *КАТАЛОЖНИЙ НОМЕР* який знаходиться в цьому оголошені над цим записом. БЕЗ КАТАЛОЖНОГО НОМЕРА ЗАПЧАТИНУ НЕ ЗНАЙДУ. Дякую, прошу ДЗВОНИТИ !!!');
 
       //picture
       foreach ($product->field_field_image as $field_field_image) {
@@ -28,8 +28,9 @@ class ExportToYml {
       $row[] = ['key' => 'param', 'attributes' => ['name' => 'Марка'], 'value' => render($product->field_field_car_brand[0]['rendered'])];
       $row[] = ['key' => 'param', 'attributes' => ['name' => 'Модель'], 'value' => render($product->field_field_car_series[0]['rendered'])];
       $row[] = ['key' => 'param', 'attributes' => ['name' => 'Год выпуска'], 'value' => $product->field_field_year[0]['raw']['value']];
+      $row[] = ['key' => 'param', 'attributes' => ['name' => 'available'], 'value' => 'true'];
 
-      $rows[] = ['key' => 'offer', 'attributes' => ['available' => TRUE, 'id' => $product->field_field_serial_namber[0]['raw']['value']], 'value' => $row];
+      $rows[] = ['key' => 'offer', 'attributes' => ['available' => 'true', 'id' => $product->field_field_serial_namber[0]['raw']['value']], 'value' => $row];
     }
 
     $xmlArray = [
@@ -62,7 +63,7 @@ class ExportToYml {
       $row['price'] = commerce_currency_amount_to_decimal($row['price'], 0);
       $row['currencyId'] = $product->field_commerce_price[0]['raw']['currency_code'];
       $row['name'] = $product->commerce_product_field_data_field_product_title;
-      $row['description'] = $product->commerce_product_field_data_field_product_title;
+      $row['description'] = t('УВАГА !!! Товар є в наявності.') . '<br/>' . t('Якщо ви хочете замовити цей товар, прошу замовте через сайт, або передзвонити по телефону і продиктувати *КАТАЛОЖНИЙ НОМЕР* який знаходиться в цьому оголошені над цим записом. БЕЗ КАТАЛОЖНОГО НОМЕРА ЗАПЧАТИНУ НЕ ЗНАЙДУ. Дякую, прошу ДЗВОНИТИ !!!');
 
       //picture
       foreach ($product->field_field_image as $field_field_image) {
@@ -79,7 +80,7 @@ class ExportToYml {
       $rows[] = ['key' => 'offer', 'attributes' => ['available' => TRUE, 'id' => $product->field_field_serial_namber[0]['raw']['value']], 'value' => $row];
     }
 
-    if ($page === 1) {
+    if ((int) $page === (int) 1) {
       $this->startToFileInProgress();
     }
     $this->toFileInProgress($rows);
@@ -126,8 +127,8 @@ class ExportToYml {
       $total_items = $view->query->pager->get_total_items();
 
       $result = $view->result;
-      $progress = ($offset + $items_per_page)/$total_items * 100;
-      $last = $total_items < ($offset + $items_per_page) ? TRUE : FALSE ;
+      $progress = ($offset + $items_per_page)/($offset + $items_per_page + $total_items) * 100;
+      $last = $total_items < 0 ? TRUE : FALSE ;
     }
 
     return [$result, $progress, $last];
