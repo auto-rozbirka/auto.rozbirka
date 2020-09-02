@@ -251,8 +251,8 @@ $databases = array (
     array (
       'database' => 'drupal',
       'username' => 'root',
-      'password' => '',
-      'host' => 'localhost',
+      'password' => 'root_access',
+      'host' => 'mariadb_auto_parts',
       'port' => '',
       'driver' => 'mysql',
       'prefix' => '',
@@ -629,7 +629,7 @@ $conf['404_fast_html'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
  *
  * Remove the leading hash sign to enable.
  */
-# $conf['theme_debug'] = TRUE;
+$conf['theme_debug'] = TRUE;
 
 /**
  * CSS identifier double underscores allowance:
@@ -647,7 +647,7 @@ function p($p = 'function p()', $f = FALSE) {
   echo '<pre>';
   print_r($p);
   echo '</pre>';
-  if ($p) {
+  if ($f) {
     exit;
   }
 }

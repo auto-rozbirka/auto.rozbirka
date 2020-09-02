@@ -15,7 +15,7 @@ class ExportToYml {
       $row['price'] = commerce_currency_amount_to_decimal($row['price'], 0);
       $row['currencyId'] = $product->field_commerce_price[0]['raw']['currency_code'];
       $row['name'] = $product->commerce_product_field_data_field_product_title;
-      $row['description'] = t('УВАГА !!! Товар є в наявності.') . '<br/>' . t('Якщо ви хочете замовити цей товар, прошу замовте через сайт, або передзвонити по телефону і продиктувати *КАТАЛОЖНИЙ НОМЕР* який знаходиться в цьому оголошені над цим записом. БЕЗ КАТАЛОЖНОГО НОМЕРА ЗАПЧАТИНУ НЕ ЗНАЙДУ. Дякую, прошу ДЗВОНИТИ !!!');
+      $row['description'] = t('УВАГА !!! Товар є в наявності.') . '<br/>' . t('Якщо ви хочете замовити цей товар, прошу замовте через сайт, або передзвонити по телефону і продиктувати КАТАЛОЖНИЙ НОМЕР: %currency_code .', ['%currency_code' => $row['currencyId']]);
 
       //picture
       foreach ($product->field_field_image as $field_field_image) {
